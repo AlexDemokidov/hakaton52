@@ -110,6 +110,14 @@ def kv_from_text(text: str) -> Dict[str, str]:
     if m:
         out["registered"] = m.group(1).strip()
 
+    # Основной вид деятельности
+    m = re.search(r"Основной вид деятельности\s*([^(]+)\s*\(([^)]+)\)", t, flags=re.IGNORECASE)
+    if m:
+        out["main_activity"] = {
+            "name": m.group(1).strip(),
+            "code": m.group(2).strip()
+        }
+
     return out
 
 

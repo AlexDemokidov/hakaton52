@@ -15,3 +15,5 @@ scrapy==2.1.0
 scrapy-mysql-pipeline==2019.7.19
 scrapy-rotating-proxies==0.6.2
 scrapy-fake-useragent
+PyPDF2
+python-multipart

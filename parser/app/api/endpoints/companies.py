@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status, UploadFile, File
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from typing import Optional, List
@@ -145,3 +145,46 @@ async def get_company_rusprofile(inn: str):
         raise HTTPException(status_code=500, detail=data["error"])
 
     return JSONResponse(content=data)
+
+# Pdf parser
+import PyPDF2
+import io
+
+@router.post("/parse-pdf/")
+async def parse_pdf(file: UploadFile = File(...)):
+    if not file.filename.lower().endswith('.pdf'):
+        raise HTTPException(400, "Требуется PDF файл")
+    
+    content = await file.read()
+    pdf = PyPDF2.PdfReader(io.BytesIO(content))
+    text = " ".join(p.extract_text() or "" for p in pdf.pages)
+    text = re.sub(r"\s+", " ", text)
+    
+    data = {}
+    patterns = {
+        "inn": r"ИНН\s+(?:юридического лица\s*)?(\d{10,12})",
+        # "orgName": "",
+        "orgFullName": r"Полное наименование на русском языке\s+([«\"A-ZА-ЯЁ0-9\s\.\-]+)",
+        # "status": "",
+        "legalAddress": r"Адрес юридического лица\s+([0-9,А-ЯЁа-яё\.\-\s]+?)(?=\s\d{2,3}\s|\sE-mail|$)",
+        # "productionAddress": "",
+        # "additionalSiteAddress": "",
+        # "industry": "",
+        # "subIndustry": "",
+        # "mainOkved": "",
+        # "mainOkvedActivity": "",
+        # "productionOkved": "",
+        # "registrationDate": "",
+        "head": r"(?:Фамилия Имя Отчество|Руководитель|Генеральный директор)\s*([А-ЯЁA-Z\s\-]+)",
+        # "parentOrgName": "",
+        # "parentOrgInn": 0,
+        "ogrn": r"ОГРН\s+(\d{13,15})",
+        #...
+        "email": r"E[-\s]*mail\s+([\w\.\-]+@[\w\.\-]+)",
+    }
+
+    for key, pattern in patterns.items():
+        if m := re.search(pattern, text, re.IGNORECASE):
+            data[key] = m.group(1).strip()
+    
+    return data

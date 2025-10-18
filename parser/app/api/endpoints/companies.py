@@ -162,11 +162,18 @@ async def parse_pdf(file: UploadFile = File(...)):
     
     data = {}
     patterns = {
-        "inn": r"ИНН\s+(?:юридического лица\s*)?(\d{10,12})",
-        # "orgName": "",
-        "orgFullName": r"Полное наименование на русском языке\s+([«\"A-ZА-ЯЁ0-9\s\.\-]+)",
-        # "status": "",
+        "inn": r"ИНН юридического лица [^\d]*([\d\s]{10,11})",
+        "kpp": r"КПП\s+(?:юридического лица\s*)?(\d{9,12})",
+        "orgFullName": r"Полное наименование на русском языке\s+([^0-9]+)",
+        "registrationNalogDate": r"Дата постановки на учет в налоговом\s*органе\s*(\d{2}\.\d{2}\.\d{4})",
+        "registerNumberInsurer": r"Регистрационный номер страхователя\s+(\d{5,15})",
+        "registrationInsureDate": r"Дата постановки на учет в качестве\s*страхователя\s*(\d{2}\.\d{2}\.\d{4})",
+        "main_okved": r"Код и наименование вида деятельности\s+([\d\.]+)",
+        "okved_description": r"Код и наименование вида деятельности\s+[\d\.]+\s+([А-Яа-яЁё\s,\-\"\n\(\)]+)",
         "legalAddress": r"Адрес юридического лица\s+([0-9,А-ЯЁа-яё\.\-\s]+?)(?=\s\d{2,3}\s|\sE-mail|$)",
+        "head": r"(?:Фамилия Имя Отчество|Руководитель|Генеральный директор)\s*([А-ЯЁA-Z\s\-]+)",
+        "ogrn": r"ОГРН\s+(\d{13,15})",
+        "email": r"E[-\s]*mail\s+([\w\.\-]+@[\w\.\-]+)",
         # "productionAddress": "",
         # "additionalSiteAddress": "",
         # "industry": "",
@@ -175,12 +182,9 @@ async def parse_pdf(file: UploadFile = File(...)):
         # "mainOkvedActivity": "",
         # "productionOkved": "",
         # "registrationDate": "",
-        "head": r"(?:Фамилия Имя Отчество|Руководитель|Генеральный директор)\s*([А-ЯЁA-Z\s\-]+)",
         # "parentOrgName": "",
-        # "parentOrgInn": 0,
-        "ogrn": r"ОГРН\s+(\d{13,15})",
+        # "parentOrgInn": "",
         #...
-        "email": r"E[-\s]*mail\s+([\w\.\-]+@[\w\.\-]+)",
     }
 
     for key, pattern in patterns.items():
@@ -188,3 +192,4 @@ async def parse_pdf(file: UploadFile = File(...)):
             data[key] = m.group(1).strip()
     
     return data
+    # return text

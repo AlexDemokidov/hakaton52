@@ -119,3 +119,29 @@ async def update_company(
     await db.refresh(company)
     
     return company
+
+### Rusprofile
+
+from app.services.rusprofile import fetch_company_by_inn
+import asyncio
+import concurrent.futures
+import re
+from typing import Dict, Any
+from fastapi.responses import JSONResponse
+
+# Rusprofile endpoints
+@router.get("/rusprofile/{inn}", response_model=Dict[str, Any])
+async def get_company_rusprofile(inn: str):
+    """Возвращает данные о компании с Rusprofile по ИНН."""
+    if not re.fullmatch(r"\d{10}|\d{12}", inn):
+        raise HTTPException(status_code=400, detail="ИНН должен быть 10 или 12 цифр")
+
+    # выполняем синхронную функцию в пуле потоков
+    loop = asyncio.get_event_loop()
+    with concurrent.futures.ThreadPoolExecutor() as pool:
+        data = await loop.run_in_executor(pool, fetch_company_by_inn, inn)
+
+    if "error" in data:
+        raise HTTPException(status_code=500, detail=data["error"])
+
+    return JSONResponse(content=data)

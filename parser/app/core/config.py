@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     
     # API
     API_V1_STR: str = "/api/v1"
-    PROJECT_NAME: str = "Company API"
+    PROJECT_NAME: str = "Company Parser API"
     
     # Scheduler
     SCHEDULER_HOUR: int = 2  # 2 AM

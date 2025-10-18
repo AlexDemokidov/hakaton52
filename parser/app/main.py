@@ -46,7 +46,7 @@ app.include_router(
 @app.get("/")
 async def root():
     return {
-        "message": "Company API Service",
+        "message": "Company Parser API Service",
         "docs": "/api/docs",
         "health": "/health"
     }

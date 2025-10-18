@@ -45,7 +45,7 @@ class ProductionData(Base):
     
     # Production capacity
     production_area = Column(DECIMAL(10, 2))
-    standardized_products = Column(Boolean)  # Теперь Boolean импортирован
+    standardized_products = Column(Boolean)
     product_names = Column(String(1000))
     product_okpd_codes = Column(String(1000))
     product_segments = Column(String(1000))

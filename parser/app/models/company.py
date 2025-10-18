@@ -9,19 +9,19 @@ class Company(Base):
     id = Column(Integer, primary_key=True, index=True)
     inn = Column(String(20), unique=True, index=True, nullable=False)
     name = Column(String(500))
-    full_name = Column(String(1000))  # Увеличили с Text
-    status = Column(String(500))  # Увеличили с 100
-    legal_address = Column(String(1000))  # Увеличили с Text
-    production_address = Column(String(1000))  # Увеличили с Text
-    additional_site_address = Column(String(1000))  # Увеличили с Text
-    main_industry = Column(String(500))  # Увеличили с 300
-    sub_industry = Column(String(500))  # Увеличили с 300
-    main_okved = Column(String(200), index=True)  # Увеличили с 100
-    okved_description = Column(String(1000))  # Увеличили с Text
-    production_okved = Column(String(200))  # Увеличили с 100
+    full_name = Column(String(1000))
+    status = Column(String(500))
+    legal_address = Column(String(1000))
+    production_address = Column(String(1000))
+    additional_site_address = Column(String(1000))
+    main_industry = Column(String(500))
+    sub_industry = Column(String(500))
+    main_okved = Column(String(200), index=True)
+    okved_description = Column(String(1000))
+    production_okved = Column(String(200))
     registration_date = Column(Date)
-    director = Column(String(500))  # Увеличили с 300
-    head_organization = Column(String(1000))  # Увеличили с 500
+    director = Column(String(500))
+    head_organization = Column(String(1000))
     head_inn = Column(String(20))
     management_contacts = Column(Text)
     employee_contacts = Column(Text)
@@ -29,8 +29,8 @@ class Company(Base):
     website = Column(String(500))
     email = Column(String(300))
     support_measures = Column(Text)
-    special_status = Column(String(500))  # Увеличили с 200
-    msp_status = Column(String(200))  # Увеличили с 100
+    special_status = Column(String(500))
+    msp_status = Column(String(200))
     created_at = Column(TIMESTAMP, server_default=func.now())
     updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
     

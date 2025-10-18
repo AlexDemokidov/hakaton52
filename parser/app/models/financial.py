@@ -42,7 +42,6 @@ class FinancialData(Base):
     # Relationship
     company = relationship("Company", back_populates="financial_data")
     
-    # ПРАВИЛЬНОЕ объявление constraints
     __table_args__ = (
         UniqueConstraint('company_id', 'year', name='unique_company_year'),
     )

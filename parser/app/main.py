@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
-import datetime  # Добавляем импорт
+import datetime
 
 from app.core.config import settings
 from app.api.endpoints import companies, admin

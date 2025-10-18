@@ -46,8 +46,6 @@ async def scheduled_data_refresh():
     logger.info("Starting scheduled data refresh")
     
     try:
-        # Здесь можно добавить логику запуска парсера
-        # Например, через dependency injection или прямое создание
         logger.info("Scheduled data refresh completed")
         
     except Exception as e:
